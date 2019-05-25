@@ -1,5 +1,11 @@
+import http from 'http'
 import app from './app'
 
-app.listen(3000, (): void => {
-  console.log('listening on port 3000')
-})
+const server = http.createServer(app)
+
+server.listen(
+  process.env.PORT,
+  (): void => {
+    console.log(`listening on port ${process.env.PORT}`)
+  }
+)
