@@ -70,3 +70,9 @@ class App {
 }
 
 export default new App().express
+
+const mega = {
+  JR: '2 5 23 32 45 61',
+  Diego: '4 13 17 26 45 50',
+  Diane: '2 3 9 15 23 26'
+}
