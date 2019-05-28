@@ -1,11 +1,13 @@
+import dotenv from 'dotenv'
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { PassportStatic } from 'passport'
 import User from '../Models/User'
+
+dotenv.config({ path: '.env' })
 
 export default function (passport) {
   var opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: '1k20D2u27dDd2OOai1239889S874'
+    secretOrKey: process.env.SECRET
   }
 
   passport.use(

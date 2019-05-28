@@ -1,5 +1,6 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import User from '../Models/User'
+import { next } from 'sucrase/dist/parser/tokenizer'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -8,12 +9,35 @@ class UserController {
     return res.json(users)
   }
 
-  public async create (req: Request, res: Response): Promise<Response> {
-    const user = await User.create(req.body)
+  public async create (req: Request, res: Response, next: NextFunction): Promise<Response> {
+    try {
+      const { firstName, lastName, email, password } = req.body
 
-    const fullName = user.fullName()
+      if (!firstName || !lastName || !email || !password) {
+        const error = new Error('Required field is missing.')
+        error.status = 400
+        throw error
+      }
 
-    return res.json(fullName)
+      if (await User.findOne({ email })) {
+        const error = new Error('Email already registered.')
+        error.status = 400
+        throw error
+      }
+
+      const user = await User.create({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password
+      })
+
+      const fullName = user.fullName()
+
+      return res.json({ message: `The user ${fullName}, was created!` })
+    } catch (error) {
+      next(error)
+    }
   }
 }
 

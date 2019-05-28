@@ -9,6 +9,7 @@
     "build": "sucrase ./src -d ./dist --transforms typescript,imports"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/compression": "^0.0.36",
     "@types/cors": "^2.8.5",
     "@types/dotenv": "^6.1.1",
