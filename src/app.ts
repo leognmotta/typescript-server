@@ -37,10 +37,12 @@ class App {
   }
 
   private errorHandler (): void {
-    this.express.use((req, res, next): void => {
-      const error = new ApiError('Route not found.', 404, 'The route is nout found.')
-      next(error)
-    })
+    this.express.use(
+      (req, res, next): void => {
+        const error = new ApiError('Route not found.', 404, 'The route is nout found.')
+        next(error)
+      }
+    )
 
     this.express.use(
       (error: ApiError, req: Request, res: Response): void => {
