@@ -9,6 +9,7 @@ import logger from 'morgan'
 
 import routes from './routes/v1'
 import ApiError from './services/apiError'
+import { NextFunction } from 'connect'
 dotenv.config({ path: '.env' })
 
 class App {
@@ -45,7 +46,7 @@ class App {
     )
 
     this.express.use(
-      (error: ApiError, req: Request, res: Response): void => {
+      (error: ApiError, req: Request, res: Response, next: NextFunction): void => {
         console.log(error)
         const status = error.statusCode || 500
         const message = error.message
