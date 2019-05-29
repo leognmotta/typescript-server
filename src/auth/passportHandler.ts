@@ -4,15 +4,15 @@ import User from '../Models/User'
 
 dotenv.config({ path: '.env' })
 
-export default function (passport) {
+export default function (passport): void {
   var opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.SECRET
   }
 
   passport.use(
-    new Strategy(opts, async function (jwt_payload, done) {
-      User.findOne({ id: jwt_payload.sub }, function (err, user) {
+    new Strategy(opts, async function (jwtPayload, done): Promise<void> {
+      User.findOne({ id: jwtPayload.sub }, function (err, user): void {
         if (err) {
           return done(err, false)
         }

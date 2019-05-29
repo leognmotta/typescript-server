@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import isAuth from '../../auth/isAuth'
 
 import UserController from '../../controllers/UserController'
 

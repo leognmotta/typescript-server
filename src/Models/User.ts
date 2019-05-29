@@ -13,31 +13,15 @@ interface UserInterface extends Document {
 
 const UserSchema = new Schema(
   {
-    email: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    firstName: {
-      type: String,
-      required: true
-    },
-    lastName: {
-      type: String,
-      required: true
-    },
-    password: {
-      type: String,
-      required: true,
-      select: false
-    }
+    email: { type: String, required: true, unique: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    password: { type: String, required: true, select: false }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 )
 
-UserSchema.pre('save', async function (next: NextFunction) {
+UserSchema.pre('save', async function (next: NextFunction): Promise<void> {
   if (this.isModified('password') || this.isNew) {
     const hash = await bcrypt.hash(this.password, 10)
     this.password = hash

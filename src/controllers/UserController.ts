@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import User from '../Models/User'
-import { next } from 'sucrase/dist/parser/tokenizer'
+import ApiError from '../services/apiError'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -14,15 +14,11 @@ class UserController {
       const { firstName, lastName, email, password } = req.body
 
       if (!firstName || !lastName || !email || !password) {
-        const error = new Error('Required field is missing.')
-        error.status = 400
-        throw error
+        throw new ApiError('Required field', 400, 'One or more required fields are missing.')
       }
 
       if (await User.findOne({ email })) {
-        const error = new Error('Email already registered.')
-        error.status = 400
-        throw error
+        throw new ApiError('Email registered', 400, 'The email is already in use.')
       }
 
       const user = await User.create({

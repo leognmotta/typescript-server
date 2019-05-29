@@ -1,4 +1,4 @@
-import express, { ErrorRequestHandler, Request, Response, NextFunction } from 'express'
+import express, { Request, Response } from 'express'
 import * as bodyParser from 'body-parser'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -8,6 +8,7 @@ import dotenv from 'dotenv'
 import logger from 'morgan'
 
 import routes from './routes/v1'
+import ApiError from './services/apiError'
 dotenv.config({ path: '.env' })
 
 class App {
@@ -36,16 +37,15 @@ class App {
   }
 
   private errorHandler (): void {
-    this.express.use((req, res, next) => {
-      const error = new Error('Route not found.')
-      error.status = 404
+    this.express.use((req, res, next): void => {
+      const error = new ApiError('Route not found.', 404, 'The route is nout found.')
       next(error)
     })
 
     this.express.use(
-      (error: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
+      (error: ApiError, req: Request, res: Response): void => {
         console.log(error)
-        const status = error.status || 500
+        const status = error.statusCode || 500
         const message = error.message
         res.status(status).json({ message: message, status: status })
       }
@@ -59,8 +59,8 @@ class App {
       useNewUrlParser: true
     })
     mongoose.connection
-      .once('open', () => console.log(`connected to databse`))
-      .on('error', error => console.warn('error: ' + error))
+      .once('open', (): void => console.log(`connected to databse`))
+      .on('error', (error): void => console.warn('error: ' + error))
   }
 
   private routes (): void {
