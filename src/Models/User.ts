@@ -9,6 +9,7 @@ interface UserInterface extends Document {
   lastName: string
   password: string
   fullName(): string
+  getToken(): string
 }
 
 const UserSchema = new Schema(
@@ -31,7 +32,7 @@ UserSchema.pre('save', async function (next: NextFunction): Promise<void> {
 })
 
 UserSchema.methods.fullName = function (): string {
-  return `${this.firstName} ${this.lastName}`
+  return `${this.firstName.trim()} ${this.lastName.trim()}`
 }
 
 UserSchema.methods.getToken = function (): string {
