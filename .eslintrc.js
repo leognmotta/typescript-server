@@ -14,5 +14,13 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  rules: {}
+  rules: {},
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': [2, { args: 'none' }]
+      }
+    }
+  ]
 }
